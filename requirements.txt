@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pandas
+numpy
+scikit-learn==1.3.2
+joblib
+faiss-cpu
+python-dotenv
+azure-storage-blob
+streamlit
