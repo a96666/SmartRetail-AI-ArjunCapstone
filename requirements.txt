@@ -10,3 +10,5 @@ azure-storage-blob
 streamlit
 pytest
 httpx
+pymongo
+dnspython

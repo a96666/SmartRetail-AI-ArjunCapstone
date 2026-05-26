@@ -9,8 +9,6 @@ from sentence_transformers import SentenceTransformer
 # LOAD VECTOR DATABASE
 # =========================================
 
-print("\nLoading vector database...")
-
 index = faiss.read_index(
     "models/retail_vector_store.index"
 )
@@ -36,8 +34,6 @@ model = SentenceTransformer(
     "all-MiniLM-L6-v2"
 )
 
-print("\nAI Retail Assistant Ready!")
-
 
 # =========================================
 # SEARCH FUNCTION
@@ -45,21 +41,16 @@ print("\nAI Retail Assistant Ready!")
 
 def search_documents(query, top_k=5):
 
-    # Convert query into embedding
     query_embedding = model.encode(
         [query]
     )
 
-
-    # Search similar vectors
     distances, indices = index.search(
         np.array(query_embedding),
         top_k
     )
 
-
     results = []
-
 
     for idx in indices[0]:
 
@@ -67,48 +58,28 @@ def search_documents(query, top_k=5):
             documents[idx]
         )
 
-
     return results
 
 
 # =========================================
-# MAIN CHAT LOOP
+# RAG RESPONSE FUNCTION
 # =========================================
 
-while True:
+def retail_rag_response(query):
 
-    print("\n=================================")
+    retrieved_docs = search_documents(query)
 
-    query = input(
-        "\nAsk Retail AI Assistant: "
-    )
+    context = "\n".join(retrieved_docs)
 
+    response = f"""
+Based on retrieved retail knowledge:
 
-    # Exit condition
-    if query.lower() == "exit":
+{context}
 
-        print("\nClosing AI Assistant...")
+Answer:
+The query suggests insights related to retail analytics,
+customer behavior, inventory trends,
+and business operations.
+"""
 
-        break
-
-
-    # Search relevant docs
-    retrieved_docs = search_documents(
-        query
-    )
-
-
-    # Display AI Response
-    print("\nAI Assistant Response:\n")
-
-
-    for i, doc in enumerate(
-        retrieved_docs,
-        start=1
-    ):
-
-        print(f"\nResult {i}:")
-
-        print(doc)
-
-        print("-" * 40)
+    return response

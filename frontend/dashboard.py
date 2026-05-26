@@ -4,6 +4,13 @@ import pandas as pd
 
 
 # =====================================
+# AZURE BACKEND URL
+# =====================================
+
+BASE_URL = "https://smart-retail-ai-app-eaf0ada6akevggfb.centralindia-01.azurewebsites.net"
+
+
+# =====================================
 # PAGE CONFIG
 # =====================================
 
@@ -157,22 +164,43 @@ if menu == "Sales Forecast":
             "weekday": 4
         }
 
+        try:
 
-        response = requests.post(
+            response = requests.post(
 
-            "http://127.0.0.1:8001/predict-sales",
+                f"{BASE_URL}/predict-sales",
 
-            json=data
-        )
+                json=data
+            )
 
+            result = response.json()
 
-        result = response.json()
+            st.write(result)
 
+            if "predicted_sales" in result:
 
-        st.success(
+                st.success(
 
-            f"Predicted Sales: {result['predicted_sales']}"
-        )
+                    f"Predicted Sales: {result['predicted_sales']}"
+                )
+
+            elif "prediction" in result:
+
+                st.success(
+
+                    f"Predicted Sales: {result['prediction']}"
+                )
+
+            else:
+
+                st.error(
+
+                    f"Unexpected API Response: {result}"
+                )
+
+        except Exception as e:
+
+            st.error(f"API Error: {e}")
 
 
 # =====================================
@@ -245,22 +273,36 @@ elif menu == "Anomaly Detection":
             "profit": profit
         }
 
+        try:
 
-        response = requests.post(
+            response = requests.post(
 
-            "http://127.0.0.1:8001/detect-anomaly",
+                f"{BASE_URL}/detect-anomaly",
 
-            json=data
-        )
+                json=data
+            )
 
+            result = response.json()
 
-        result = response.json()
+            st.write(result)
 
+            if "status" in result:
 
-        st.warning(
+                st.warning(
 
-            f"Status: {result['status']}"
-        )
+                    f"Status: {result['status']}"
+                )
+
+            else:
+
+                st.error(
+
+                    f"Unexpected API Response: {result}"
+                )
+
+        except Exception as e:
+
+            st.error(f"API Error: {e}")
 
 
 # =====================================
@@ -285,16 +327,30 @@ else:
             "query": query
         }
 
+        try:
 
-        response = requests.post(
+            response = requests.post(
 
-            "http://127.0.0.1:8001/chat",
+                f"{BASE_URL}/chat",
 
-            json=data
-        )
+                json=data
+            )
 
+            result = response.json()
 
-        result = response.json()
+            st.write(result)
 
+            if "response" in result:
 
-        st.info(result["response"])
+                st.info(result["response"])
+
+            else:
+
+                st.error(
+
+                    f"Unexpected API Response: {result}"
+                )
+
+        except Exception as e:
+
+            st.error(f"API Error: {e}")

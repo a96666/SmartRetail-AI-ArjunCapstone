@@ -1,5 +1,6 @@
 import pandas as pd
 import joblib
+from app.rag.retail_ai_agent import retail_rag_response
 
 
 # =========================================
@@ -75,33 +76,9 @@ def anomaly_agent():
 # =========================================
 
 def retrieval_agent(query):
+    return retail_rag_response(query)
 
-    documents = [
-
-        "Retail sales increased in the West region.",
-
-        "Technology products generated highest profit.",
-
-        "Furniture category had lower sales performance.",
-
-        "Corporate customers contributed most revenue.",
-
-        "Anomaly detection helps identify fraud transactions."
-    ]
-
-    results = []
-
-    for doc in documents:
-
-        if query.lower() in doc.lower():
-
-            results.append(doc)
-
-    if len(results) == 0:
-
-        results = documents[:2]
-
-    return results
+    
 
 
 # =========================================

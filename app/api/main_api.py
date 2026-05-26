@@ -153,7 +153,7 @@ def predict_sales(request: ForecastRequest):
 
         raise HTTPException(
             status_code=500,
-            detail="Sales prediction failed"
+            detail=str(e)
         )
 
 
@@ -214,7 +214,7 @@ def detect_anomaly(request: AnomalyRequest):
 
         raise HTTPException(
             status_code=500,
-            detail="Anomaly detection failed"
+            detail=str(e)
         )
 
 
@@ -257,5 +257,5 @@ def chat_with_agent(request: ChatRequest):
 
         raise HTTPException(
             status_code=500,
-            detail="Chat agent failed"
+            detail=str(e)
         )
